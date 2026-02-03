@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forever With Mira ❤️</title>
+
+<style>
+body{
+margin:0;
+padding:0;
+font-family: Arial;
+text-align:center;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
+color:white;
+overflow:hidden;
+}
+
+.container{
+margin-top:60px;
+padding:20px;
+}
+
+h1{font-size:28px;}
+
+#typeText{
+font-size:18px;
+margin:15px;
+min-height:60px;
+}
+
+img{
+width:90%;
+max-width:280px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(255,255,255,0.6);
+margin-top:15px;
+}
+
+button{
+padding:10px 25px;
+font-size:18px;
+border:none;
+border-radius:30px;
+margin:10px;
+cursor:pointer;
+transition:0.3s;
+}
+
+#yes{
+background:white;
+color:#ff416c;
+font-weight:bold;
+}
+
+#no{
+background:black;
+color:white;
+position:absolute;
+}
+
+.ring{
+font-size:70px;
+animation:zoom 1.5s infinite alternate;
+}
+
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.2);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop preload="auto">
+<source src="bg.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="yesMusic" preload="auto">
+<source src="yes.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+<h1>Mira ❤️</h1>
+<div id="typeText"></div>
+<img id="slideshow" src="1.jpg">
+
+<br>
+
+<button id="yes" onclick="yesClick()">YES 😍</button>
+<button id="no" onmouseover="moveNo()">NO 😜</button>
+
+<p style="font-size:14px;margin-top:10px;">Tap anywhere to start music 🎵</p>
+
+</div>
+
+<script>
+
+// Start music on first tap (mobile safe)
+document.body.addEventListener("click", function() {
+document.getElementById("bgMusic").play();
+}, { once: true });
+
+document.body.addEventListener("touchstart", function() {
+document.getElementById("bgMusic").play();
+}, { once: true });
+
+// Typewriter
+var text="Mira… My heart chooses you every single day 💞 Will you stay with me forever? 💍";
+var i=0;
+function typeEffect(){
+if(i<text.length){
+document.getElementById("typeText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typeEffect,40);
+}
+}
+typeEffect();
+
+// Slideshow
+var images=["1.jpg","2.jpg","3.jpg","4.jpg"];
+var index=0;
+
+setInterval(function(){
+index=(index+1)%images.length;
+document.getElementById("slideshow").src=images[index];
+},2000);
+
+// Funny NO button
+let yesSize=18;
+function moveNo(){
+let noBtn=document.getElementById("no");
+let x=Math.random()*(window.innerWidth-100);
+let y=Math.random()*(window.innerHeight-50);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+
+yesSize+=3;
+document.getElementById("yes").style.fontSize=yesSize+"px";
+
+noBtn.innerHTML="Think Again 😜";
+}
+
+// YES click
+function yesClick(){
+
+document.getElementById("bgMusic").pause();
+document.getElementById("yesMusic").play();
+
+document.body.innerHTML=`
+<h1 style="margin-top:120px;font-size:30px;">
+She Said YESSS 😍💖<br><br>
+Forever With Mira ♾️
+</h1>
+<div class="ring">💍</div>
+`;
+}
+
+</script>
+
+</body>
+</html>
