@@ -19,14 +19,8 @@ overflow:hidden;
 .container{
 margin-top:60px;
 padding:20px;
-}
-
-h1{font-size:28px;}
-
-#typeText{
-font-size:18px;
-margin:15px;
-min-height:60px;
+position:relative;
+z-index:2;
 }
 
 img{
@@ -59,104 +53,133 @@ color:white;
 position:absolute;
 }
 
-.ring{
-font-size:70px;
-animation:zoom 1.5s infinite alternate;
+.heart{
+position:fixed;
+color:white;
+animation:float 6s linear infinite;
 }
 
-@keyframes zoom{
-from{transform:scale(1);}
-to{transform:scale(1.2);}
+@keyframes float{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop preload="auto">
+<canvas id="fireworks"></canvas>
+
+<audio id="bgMusic" loop>
 <source src="bg.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="yesMusic" preload="auto">
+<audio id="yesMusic">
 <source src="yes.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
 <h1>Mira ❤️</h1>
-<div id="typeText"></div>
-<img id="slideshow" src="1.jpg">
-
+<p id="text"></p>
+<img id="photo" src="1.jpg">
 <br>
-
 <button id="yes" onclick="yesClick()">YES 😍</button>
 <button id="no" onmouseover="moveNo()">NO 😜</button>
-
-<p style="font-size:14px;margin-top:10px;">Tap anywhere to start music 🎵</p>
-
+<p>Tap anywhere to start music 🎵</p>
 </div>
 
 <script>
 
-// Start music on first tap (mobile safe)
-document.body.addEventListener("click", function() {
-document.getElementById("bgMusic").play();
-}, { once: true });
+// Start background music on first tap
+document.body.addEventListener("click", function(){
+let bg=document.getElementById("bgMusic");
+bg.play();
+}, { once:true });
 
-document.body.addEventListener("touchstart", function() {
-document.getElementById("bgMusic").play();
-}, { once: true });
-
-// Typewriter
-var text="Mira… My heart chooses you every single day 💞 Will you stay with me forever? 💍";
-var i=0;
-function typeEffect(){
-if(i<text.length){
-document.getElementById("typeText").innerHTML+=text.charAt(i);
+// Typewriter text
+let message="Mira… My heart chooses you every single day 💞 Will you stay with me forever? 💍";
+let i=0;
+function type(){
+if(i<message.length){
+document.getElementById("text").innerHTML+=message.charAt(i);
 i++;
-setTimeout(typeEffect,40);
+setTimeout(type,40);
 }
 }
-typeEffect();
+type();
 
 // Slideshow
-var images=["1.jpg","2.jpg","3.jpg","4.jpg"];
-var index=0;
-
+let images=["1.jpg","2.jpg","3.jpg","4.jpg"];
+let index=0;
 setInterval(function(){
 index=(index+1)%images.length;
-document.getElementById("slideshow").src=images[index];
+document.getElementById("photo").src=images[index];
 },2000);
 
-// Funny NO button
-let yesSize=18;
+// Floating hearts
+setInterval(function(){
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(15+Math.random()*20)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},500);
+
+// Move NO button
 function moveNo(){
-let noBtn=document.getElementById("no");
-let x=Math.random()*(window.innerWidth-100);
-let y=Math.random()*(window.innerHeight-50);
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
+let no=document.getElementById("no");
+no.style.left=Math.random()*80+"vw";
+no.style.top=Math.random()*80+"vh";
+}
 
-yesSize+=3;
-document.getElementById("yes").style.fontSize=yesSize+"px";
+// Fireworks
+function fireworks(){
+let canvas=document.getElementById("fireworks");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-noBtn.innerHTML="Think Again 😜";
+setInterval(function(){
+ctx.fillStyle="rgba(0,0,0,0.2)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+for(let i=0;i<40;i++){
+ctx.beginPath();
+ctx.arc(Math.random()*canvas.width,
+Math.random()*canvas.height,
+2,0,Math.PI*2);
+ctx.fillStyle="hsl("+Math.random()*360+",100%,50%)";
+ctx.fill();
+}
+},200);
 }
 
 // YES click
 function yesClick(){
 
-document.getElementById("bgMusic").pause();
-document.getElementById("yesMusic").play();
+let bg=document.getElementById("bgMusic");
+let yes=document.getElementById("yesMusic");
 
-document.body.innerHTML=`
-<h1 style="margin-top:120px;font-size:30px;">
-She Said YESSS 😍💖<br><br>
-Forever With Mira ♾️
-</h1>
-<div class="ring">💍</div>
-`;
+bg.pause();
+bg.currentTime=0;
+
+yes.currentTime=0;
+yes.play();
+
+fireworks();
+
+document.querySelector(".container").innerHTML=
+"<h1 style='margin-top:120px;'>She Said YESSS 😍💖<br><br>Forever With Mira ♾️</h1>";
 }
-
 </script>
 
 </body>
