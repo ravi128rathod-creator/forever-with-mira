@@ -3,32 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forever With Mira ❤️</title>
+<title>I Love You Miruu ❤️</title>
 
 <style>
 body{
 margin:0;
 padding:0;
-font-family: Arial;
+font-family:Arial;
 text-align:center;
-background:linear-gradient(135deg,#ff6a88,#ff99ac);
+background:linear-gradient(135deg,#ff4b6e,#ff758c);
 color:white;
 overflow:hidden;
 }
 
+/* Floating hearts */
+.heart{
+position:absolute;
+color:#fff;
+font-size:20px;
+animation:float 6s linear infinite;
+opacity:0.7;
+}
+@keyframes float{
+0%{transform:translateY(100vh);opacity:0;}
+100%{transform:translateY(-10vh);opacity:1;}
+}
+
+/* Main container */
 .container{
 margin-top:60px;
 padding:20px;
-position:relative;
-z-index:2;
+}
+
+/* Glowing title */
+.glow{
+font-size:32px;
+font-weight:bold;
+animation:glow 1.5s infinite alternate;
+}
+@keyframes glow{
+from{text-shadow:0 0 10px #fff;}
+to{text-shadow:0 0 25px #fff,0 0 40px pink;}
 }
 
 img{
 width:90%;
 max-width:280px;
 border-radius:20px;
-box-shadow:0 0 20px rgba(255,255,255,0.6);
 margin-top:15px;
+box-shadow:0 0 20px white;
 }
 
 button{
@@ -38,7 +61,6 @@ border:none;
 border-radius:30px;
 margin:10px;
 cursor:pointer;
-transition:0.3s;
 }
 
 #yes{
@@ -53,62 +75,61 @@ color:white;
 position:absolute;
 }
 
-.heart{
-position:fixed;
-color:white;
-animation:float 6s linear infinite;
+.bigLove{
+font-size:40px;
+margin-top:100px;
+animation:zoom 1s infinite alternate;
 }
-
-@keyframes float{
-0%{transform:translateY(100vh);opacity:1;}
-100%{transform:translateY(-10vh);opacity:0;}
-}
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-pointer-events:none;
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.1);}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="fireworks"></canvas>
-
-<audio id="bgMusic" loop>
-<source src="bg.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="yesMusic">
-<source src="yes.mp3" type="audio/mpeg">
-</audio>
-
-<div class="container">
-<h1>Mira ❤️</h1>
+<div class="container" id="mainBox">
+<h1 class="glow">Mira ❤️</h1>
 <p id="text"></p>
 <img id="photo" src="1.jpg">
 <br>
-<button id="yes" onclick="yesClick()">YES 😍</button>
+<button id="yes">YES 😍</button>
 <button id="no" onmouseover="moveNo()">NO 😜</button>
-<p>Tap anywhere to start music 🎵</p>
+<p>Tap screen to start music 🎵</p>
 </div>
 
 <script>
 
-// Start background music on first tap
-document.body.addEventListener("click", function(){
-let bg=document.getElementById("bgMusic");
-bg.play();
-}, { once:true });
+// Floating hearts generator
+setInterval(function(){
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+10)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>{heart.remove();},6000);
+},500);
 
-// Typewriter text
-let message="Mira… My heart chooses you every single day 💞 Will you stay with me forever? 💍";
+// Music
+let bgMusic=new Audio("bg.mp3");
+bgMusic.loop=true;
+
+let yesMusic=new Audio("yes.mp3");
+yesMusic.loop=true;
+
+// Start bg music on first tap
+document.body.addEventListener("click",function(){
+bgMusic.play();
+},{once:true});
+
+// Type effect
+let msg="Miruu… you are my forever, my happiness, my everything 💞";
 let i=0;
 function type(){
-if(i<message.length){
-document.getElementById("text").innerHTML+=message.charAt(i);
+if(i<msg.length){
+document.getElementById("text").innerHTML+=msg.charAt(i);
 i++;
 setTimeout(type,40);
 }
@@ -116,23 +137,12 @@ setTimeout(type,40);
 type();
 
 // Slideshow
-let images=["1.jpg","2.jpg","3.jpg","4.jpg"];
+let imgs=["1.jpg","2.jpg","3.jpg","4.jpg"];
 let index=0;
 setInterval(function(){
-index=(index+1)%images.length;
-document.getElementById("photo").src=images[index];
+index=(index+1)%imgs.length;
+document.getElementById("photo").src=imgs[index];
 },2000);
-
-// Floating hearts
-setInterval(function(){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="💖";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(15+Math.random()*20)+"px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),6000);
-},500);
 
 // Move NO button
 function moveNo(){
@@ -141,45 +151,16 @@ no.style.left=Math.random()*80+"vw";
 no.style.top=Math.random()*80+"vh";
 }
 
-// Fireworks
-function fireworks(){
-let canvas=document.getElementById("fireworks");
-let ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-setInterval(function(){
-ctx.fillStyle="rgba(0,0,0,0.2)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-for(let i=0;i<40;i++){
-ctx.beginPath();
-ctx.arc(Math.random()*canvas.width,
-Math.random()*canvas.height,
-2,0,Math.PI*2);
-ctx.fillStyle="hsl("+Math.random()*360+",100%,50%)";
-ctx.fill();
-}
-},200);
-}
-
 // YES click
-function yesClick(){
+document.getElementById("yes").addEventListener("click",function(){
 
-let bg=document.getElementById("bgMusic");
-let yes=document.getElementById("yesMusic");
+bgMusic.pause();
+bgMusic.currentTime=0;
+yesMusic.play();
 
-bg.pause();
-bg.currentTime=0;
-
-yes.currentTime=0;
-yes.play();
-
-fireworks();
-
-document.querySelector(".container").innerHTML=
-"<h1 style='margin-top:120px;'>She Said YESSS 😍💖<br><br>Forever With Mira ♾️</h1>";
-}
+document.getElementById("mainBox").innerHTML=
+"<div class='bigLove'>I LOVE YOU MIRUU ❤️💖<br><br>Forever & Always ♾️</div>";
+});
 </script>
 
 </body>
