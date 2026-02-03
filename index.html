@@ -3,47 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Love You Miruu ❤️</title>
+<title>For My Miruu ❤️</title>
 
 <style>
 body{
 margin:0;
 padding:0;
-font-family:Arial;
+font-family: 'Segoe UI', sans-serif;
 text-align:center;
-background:linear-gradient(135deg,#ff4b6e,#ff758c);
+background:radial-gradient(circle at top,#ff6a88,#ff99ac,#ff4b6e);
 color:white;
 overflow:hidden;
+animation:fadeIn 2s ease-in;
 }
 
-/* Floating hearts */
-.heart{
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+/* Sparkle stars */
+.star{
 position:absolute;
-color:#fff;
-font-size:20px;
-animation:float 6s linear infinite;
-opacity:0.7;
+width:3px;
+height:3px;
+background:white;
+border-radius:50%;
+animation:twinkle 2s infinite alternate;
 }
-@keyframes float{
-0%{transform:translateY(100vh);opacity:0;}
-100%{transform:translateY(-10vh);opacity:1;}
+@keyframes twinkle{
+from{opacity:0.3;}
+to{opacity:1;}
 }
 
-/* Main container */
+/* Heartbeat animation */
+.heartbeat{
+font-size:60px;
+animation:beat 1s infinite;
+}
+@keyframes beat{
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+}
+
 .container{
 margin-top:60px;
 padding:20px;
-}
-
-/* Glowing title */
-.glow{
-font-size:32px;
-font-weight:bold;
-animation:glow 1.5s infinite alternate;
-}
-@keyframes glow{
-from{text-shadow:0 0 10px #fff;}
-to{text-shadow:0 0 25px #fff,0 0 40px pink;}
 }
 
 img{
@@ -51,7 +57,7 @@ width:90%;
 max-width:280px;
 border-radius:20px;
 margin-top:15px;
-box-shadow:0 0 20px white;
+box-shadow:0 0 25px rgba(255,255,255,0.8);
 }
 
 button{
@@ -75,14 +81,21 @@ color:white;
 position:absolute;
 }
 
-.bigLove{
-font-size:40px;
-margin-top:100px;
-animation:zoom 1s infinite alternate;
+.loveText{
+font-size:28px;
+margin-top:20px;
+animation:glow 2s infinite alternate;
 }
-@keyframes zoom{
-from{transform:scale(1);}
-to{transform:scale(1.1);}
+@keyframes glow{
+from{text-shadow:0 0 10px #fff;}
+to{text-shadow:0 0 30px pink;}
+}
+
+.letter{
+font-size:20px;
+margin:40px;
+line-height:1.6;
+animation:fadeIn 2s ease-in;
 }
 </style>
 </head>
@@ -90,8 +103,9 @@ to{transform:scale(1.1);}
 <body>
 
 <div class="container" id="mainBox">
-<h1 class="glow">Mira ❤️</h1>
-<p id="text"></p>
+<div class="heartbeat">❤️</div>
+<h1>My Miruu</h1>
+<p class="loveText">You are my today and all of my tomorrows 💞</p>
 <img id="photo" src="1.jpg">
 <br>
 <button id="yes">YES 😍</button>
@@ -101,16 +115,15 @@ to{transform:scale(1.1);}
 
 <script>
 
-// Floating hearts generator
-setInterval(function(){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="❤️";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+10)+"px";
-document.body.appendChild(heart);
-setTimeout(()=>{heart.remove();},6000);
-},500);
+// Stars background
+for(let i=0;i<50;i++){
+let star=document.createElement("div");
+star.className="star";
+star.style.left=Math.random()*100+"vw";
+star.style.top=Math.random()*100+"vh";
+star.style.animationDelay=Math.random()*2+"s";
+document.body.appendChild(star);
+}
 
 // Music
 let bgMusic=new Audio("bg.mp3");
@@ -119,22 +132,9 @@ bgMusic.loop=true;
 let yesMusic=new Audio("yes.mp3");
 yesMusic.loop=true;
 
-// Start bg music on first tap
 document.body.addEventListener("click",function(){
 bgMusic.play();
 },{once:true});
-
-// Type effect
-let msg="Miruu… you are my forever, my happiness, my everything 💞";
-let i=0;
-function type(){
-if(i<msg.length){
-document.getElementById("text").innerHTML+=msg.charAt(i);
-i++;
-setTimeout(type,40);
-}
-}
-type();
 
 // Slideshow
 let imgs=["1.jpg","2.jpg","3.jpg","4.jpg"];
@@ -142,7 +142,7 @@ let index=0;
 setInterval(function(){
 index=(index+1)%imgs.length;
 document.getElementById("photo").src=imgs[index];
-},2000);
+},2500);
 
 // Move NO button
 function moveNo(){
@@ -155,11 +155,16 @@ no.style.top=Math.random()*80+"vh";
 document.getElementById("yes").addEventListener("click",function(){
 
 bgMusic.pause();
-bgMusic.currentTime=0;
 yesMusic.play();
 
 document.getElementById("mainBox").innerHTML=
-"<div class='bigLove'>I LOVE YOU MIRUU ❤️💖<br><br>Forever & Always ♾️</div>";
+"<div class='heartbeat'>❤️</div>"+
+"<div class='letter'>"+
+"I LOVE YOU MIRUU ❤️💖<br><br>"+
+"You are my peace, my happiness, my forever. <br>"+
+"No matter what happens in life, I promise to stand beside you always. <br><br>"+
+"Forever Yours,<br>Ravi ♾️"+
+"</div>";
 });
 </script>
 
